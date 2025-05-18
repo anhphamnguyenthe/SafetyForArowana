@@ -1,10 +1,10 @@
-/* CSS cho cửa sổ đăng nhập */
+/* === Modal Đăng Nhập === */
 .login-modal {
     display: flex;
     position: fixed;
     top: 0; left: 0;
     width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* tăng độ tối để làm nổi phần đăng nhập */
+    background-color: rgba(0, 0, 0, 0.6); /* Làm mờ nền */
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -13,13 +13,19 @@
 
 .login-container {
     width: 100%;
-    max-width: 320px;
-    padding: 25px;
-    background-color: rgba(255, 255, 255, 0.95); /* nền sáng nhẹ */
+    max-width: 340px;
+    padding: 30px;
+    background-color: rgba(255, 255, 255, 0.95); /* Nền trắng đục */
     border-radius: 10px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
     text-align: center;
     box-sizing: border-box;
+}
+
+.login-container img.logo {
+    max-width: 160px; /* Logo lớn hơn */
+    height: auto;
+    margin-bottom: 20px;
 }
 
 .login-container h2 {
@@ -34,8 +40,8 @@
     margin: 10px 0;
     border: 1px solid #ccc;
     border-radius: 5px;
-    box-sizing: border-box;
     font-size: 1em;
+    box-sizing: border-box;
 }
 
 .login-container button {
@@ -45,8 +51,8 @@
     color: #fff;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     font-size: 1em;
+    cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
@@ -54,6 +60,7 @@
     background-color: #218838;
 }
 
+/* === Nền và Phông chữ Tổng thể === */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -64,18 +71,18 @@ body {
     background-size: cover;
 }
 
-/* Header */
+/* === Header === */
 header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 15px 20px;
-    background-color: rgba(0, 0, 0, 0.3); /* làm mờ để dễ đọc trên nền ảnh */
+    background-color: rgba(0, 0, 0, 0.3);
     flex-wrap: wrap;
 }
 
 .header-left .logo {
-    max-width: 120px;
+    max-width: 160px; /* Tăng kích thước logo trong header */
     height: auto;
 }
 
@@ -87,7 +94,7 @@ header {
 }
 
 .header-right a {
-    color: #f8f9fa;
+    color: #ffffff;
     text-decoration: none;
     font-weight: bold;
     font-size: 1em;
@@ -103,14 +110,14 @@ header {
     color: #66ccff;
 }
 
-/* Tiêu đề chính */
+/* === Tiêu đề Chính === */
 .title-section {
     margin-top: 60px;
     padding: 0 15px;
 }
 
 .title-section h1 {
-    font-size: 2.2em;
+    font-size: 2.4em;
     color: #ffffff;
     margin: 0;
     text-shadow: 2px 2px 4px #000;
@@ -118,12 +125,12 @@ header {
 
 .title-section h2 {
     font-size: 2em;
-    color: #ff3333;
+    color: #ffcc00; /* Dễ đọc trên nền đỏ */
     margin: 10px 0 0;
     text-shadow: 2px 2px 4px #000;
 }
 
-/* Nội dung chính */
+/* === Nội dung chính === */
 .content {
     margin: 40px auto;
     padding: 25px;
@@ -138,10 +145,14 @@ header {
     text-shadow: 1px 1px 2px black;
 }
 
-/* Responsive cho thiết bị nhỏ */
+/* === Responsive cho thiết bị nhỏ === */
 @media (max-width: 768px) {
     .login-container {
         max-width: 90%;
+    }
+
+    .header-left .logo {
+        max-width: 120px;
     }
 
     .title-section h1,
