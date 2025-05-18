@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Đồ án tốt nghiệp</title>
+    <link rel="stylesheet" href="style-home.css">
+</head>
+<body>
+    <!-- Cửa sổ đăng nhập -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <h2>Đăng Nhập</h2>
+            <form id="loginForm">
+                <label for="username">Tên đăng nhập:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Mật khẩu:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="button" onclick="submitLogin()">Đăng nhập</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Xử lý sự kiện đăng nhập
+        function submitLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            // Kiểm tra thông tin đăng nhập
+            if (username === "admin" && password === "123456") {
+                alert("Đăng nhập thành công!");
+                sessionStorage.setItem("isLoggedIn", "true"); // Lưu trạng thái đăng nhập trong phiên làm việc
+                window.location.href = "index.html"; // Chuyển đến trang chính
+            } else {
+                alert("Tên đăng nhập hoặc mật khẩu không chính xác!");
+            }
+        }
+    </script>
+</body>
+</html>

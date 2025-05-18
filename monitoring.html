@@ -1,0 +1,178 @@
+<!-- monitoring.html -->
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Đồ án tốt nghiệp</title>
+    <link rel="stylesheet" href="style-monitoring.css">
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <img src="logo.jpeg" alt="Logo trường" class="logo">
+        </div>
+        <nav class="header-right">
+            <a href="index.html" >Trang chủ</a>
+            <a href="about.html">Giới thiệu</a>
+            <a href="monitoring.html"class="active">Giám sát</a>
+            <a href="contact.html">Liên hệ</a>
+        </nav>
+    </header>
+
+    <section class="title-section">
+        <h1>DATABASE</h1>
+    </section>
+
+    <div id="time"> </div>
+    <div id="history" style="font-size: 1.2em; font-weight: bold; color: blue; margin-bottom: 10px;"> 
+        <a href="https://docs.google.com/spreadsheets/d/1ZhJKqYZQ7QSpXliChXZVFa8epDvSdsDV_BifjYk1TOA/edit?usp=sharing" target="_blank" style="text-decoration: underline; color: blue;">Lịch sử dữ liệu của cảm biến</a>
+    </div>
+    <div class="container">
+        <!-- Slave 1 Container -->
+        <div class="slave-box" id="slave1-box">
+            <h3 style="color: red;">Trạm 1</h3>
+            <div class="sensor-grid">
+                <div class="sensor-info">
+                    <h2>Nhiệt Độ: <span id= "nhietdo">00</span> </h2>
+                    <img src="nhietdo1.png" alt="Cảm Biến Nhiệt Độ" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ Ẩm: <span id= "doam">00</span></h2>
+                    <img src="doam1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>CO: <span id= "gas">00</span></h2>
+                    <img src="5.png" alt="Cảm Biến Gas MQ2" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Tia UV: <span id= "uv">00</span></h2>
+                    <img src="8.png" alt="Cảm Biến UV" class="sensor-image">
+                </div>
+            </div>
+            <div class="charts-row">
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="temperatureChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="humidityChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="COChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="UVChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slave 2 Container -->
+        <div class="slave-box" id="slave2-box">
+            <h3 style="color: rgb(219, 20, 20);">Trạm 2</h3>
+            <div class="toggle-container">
+                <button id="toggle-button" class="toggle-off">OFF</button>
+            </div>
+            <div class="sensor-grid">
+                <div class="sensor-info">
+                    <h2>Nhiệt Độ: <span id= "nhietdob">00</span> </h2>
+                    <img src="nhietdo1.png" alt="Cảm Biến Nhiệt Độ" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ Ẩm: <span id= "doamb">00</span></h2>
+                    <img src="doam1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ bụi: <span id= "dust">00</span></h2>
+                    <img src="6.png" alt="Cảm Biến Bụi" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ ồn: <span id= "sound">00</span></h2>
+                    <img src="7.png" alt="Cảm Biến Âm Thanh" class="sensor-image">
+                </div>
+            </div>
+            <div id="slave3-box">
+                <div class="slider-container" id="wind-box">
+                    <h2>Gió: <span id="wind">50</span></h2>
+                    <img src="10.png" alt="Cảm Biến Gió" class="sensor-image-1">
+                    <input type="range" min="0" max="18" value="50" class="slider" id="windSlider">
+                    <p>Giá trị gió: <span id="windValue">50</span></p>
+                </div>
+            
+                <div class="slider-container" id="rain-box">
+                    <h2>Mưa: <span id="rain">00</span></h2>
+                    <img src="9.png" alt="Cảm Biến Mưa" class="sensor-image-1">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="rainSlider">
+                    <p>Giá trị mưa: <span id="rainValue">50</span></p>
+                </div>
+           </div>
+           <div class="charts-row">
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="Temperature2Chart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="Humidity2Chart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="DustChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="SoundChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="WindChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="RainChart"></canvas>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        
+        
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <canvas id="dataChart" width="400" height="200"></canvas>
+
+
+        
+        <script src="script.js"></script>
+</body>
+</html>

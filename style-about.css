@@ -1,0 +1,120 @@
+/* style-about.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    text-align: center;
+    background: url('bautroi.jpg') no-repeat center center fixed; /* Thêm hình nền */
+    background-size: cover;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    flex-wrap: wrap; /* Cho phép header xuống dòng trên màn hình nhỏ */
+}
+
+.header-left .logo {
+    max-width: 100%; /* Đảm bảo logo không vượt quá chiều rộng */
+    height: auto;
+}
+
+.header-right {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Khoảng cách giữa các liên kết */
+}
+
+.header-right a {
+    margin: 0 15px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.header-right a.active {
+    color: #cc0000;
+    border-bottom: 2px solid #cc0000;
+}
+
+.header-right a:hover {
+    color: #0033cc;
+}
+
+.title-section {
+    margin-top: 50px;
+    padding: 0 10px; /* Thêm padding cho khoảng cách */
+}
+
+.title-section h1 {
+    font-size: 2.5em; /* Kích thước tiêu đề */
+    color: #2f16ee;
+    margin: 0;
+}
+
+.content {
+    margin: 30px auto;
+    padding: 20px;
+    background-color: transparent;
+    display: inline-block;
+    max-width: 700px; /* Giới hạn chiều rộng tối đa cho laptop */
+    text-align: left;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.section h3 {
+    color: #333;
+    font-size: 1.5em;
+    margin: 0;
+    text-align: left;
+    text-indent: 1em; /* Thụt đầu dòng */
+}
+
+.section a {
+    color: #0033cc;
+    text-decoration: none;
+}
+
+.section a:hover {
+    text-decoration: underline;
+}
+
+.section p {
+    color: #666;
+    font-size: 1em;
+    line-height: 1.5; /* Giảm khoảng cách giữa các dòng */
+    text-align: justify;
+    text-indent: 1.5em; /* Thụt đầu dòng */
+    margin-bottom: 0.5em; /* Giảm khoảng cách giữa các đoạn */
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .header-right a {
+        margin: 5px 0; /* Giảm khoảng cách giữa các liên kết trên màn hình nhỏ */
+    }
+
+    .title-section h1 {
+        font-size: 2em; /* Kích thước tiêu đề nhỏ hơn trên điện thoại */
+    }
+
+    .content {
+        padding: 10px; /* Giảm padding cho nội dung trên điện thoại */
+        max-width: 90%; /* Giới hạn chiều rộng cho nội dung */
+    }
+
+    .section h3 {
+        font-size: 1.3em; /* Kích thước tiêu đề nhỏ hơn */
+    }
+
+    .section p {
+        font-size: 0.9em; /* Kích thước chữ nhỏ hơn cho văn bản */
+    }
+}

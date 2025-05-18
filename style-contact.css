@@ -1,0 +1,131 @@
+/* style-contact.css */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    text-align: center;
+    background: url('bautroi.jpg') no-repeat center center fixed; /* Thêm hình nền */
+    background-size: cover;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: transparent;
+    flex-wrap: wrap; /* Cho phép header xuống dòng trên màn hình nhỏ */
+}
+
+.header-left .logo {
+    max-width: 100%; /* Đảm bảo logo không vượt quá chiều rộng */
+    height: auto;
+}
+
+.header-right {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép liên kết xuống dòng trên màn hình nhỏ */
+    gap: 10px; /* Khoảng cách giữa các liên kết */
+}
+
+.header-right a {
+    margin: 0 15px;
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.header-right a.active {
+    color: #cc0000;
+    border-bottom: 2px solid #cc0000;
+}
+
+.header-right a:hover {
+    color: #0033cc;
+}
+
+.title-section {
+    margin-top: 50px;
+    padding: 0 10px; /* Thêm padding cho khoảng cách */
+}
+
+.title-section h1 {
+    font-size: 2.5em; /* Kích thước tiêu đề */
+    color: #2f16ee;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Cho phép các thành viên xuống hàng khi không đủ chỗ */
+    justify-content: space-around;
+    align-items: flex-start;
+    padding: 0 10px; /* Thêm padding cho container */
+}
+
+.member {
+    flex: 1;
+    margin: 10px;
+    min-width: 200px; /* Đặt chiều rộng tối thiểu cho thành viên */
+}
+
+.card {
+    background: transparent; /* Bỏ nền khung */
+    text-align: center; /* Căn giữa nội dung */
+}
+
+.avatar {
+    width: 300px; /* Chiều rộng của ảnh avatar */
+    height: 300px; /* Chiều cao của ảnh avatar */
+    border-radius: 50%; /* Hình tròn */
+    margin-bottom: 10px; /* Khoảng cách dưới ảnh */
+    transition: transform 0.3s; /* Hiệu ứng phóng to */
+}
+
+.avatar:hover {
+    transform: scale(1.1); /* Phóng to ảnh avatar khi di chuột qua */
+}
+
+h2 {
+    color: #333;
+    transition: color 0.3s; /* Hiệu ứng màu sắc cho tên */
+}
+
+.member-name:hover {
+    color: #007BFF; /* Đổi màu tên khi di chuột qua */
+}
+
+p {
+    color: #555;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 768px) {
+    .header-right a {
+        margin: 5px 0; /* Giảm khoảng cách giữa các liên kết trên màn hình nhỏ */
+    }
+
+    .title-section h1 {
+        font-size: 2em; /* Kích thước tiêu đề nhỏ hơn trên điện thoại */
+    }
+
+    .container {
+        flex-direction: column; /* Đặt các thành viên theo chiều dọc trên màn hình nhỏ */
+        align-items: center; /* Căn giữa */
+    }
+
+    .member {
+        width: 100%; /* Đặt chiều rộng của mỗi thành viên chiếm toàn bộ chiều rộng */
+        max-width: 300px; /* Giới hạn chiều rộng tối đa của mỗi thành viên */
+    }
+
+    .avatar {
+        width: 150px; /* Chiều rộng của ảnh avatar nhỏ hơn */
+        height: 150px; /* Chiều cao của ảnh avatar nhỏ hơn */
+    }
+
+    .title-section {
+        margin-top: 20px; /* Giảm khoảng cách trên tiêu đề */
+    }
+}
