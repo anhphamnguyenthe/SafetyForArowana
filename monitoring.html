@@ -40,6 +40,11 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .status-box:hover {
+            background-color: #e9ecef;
         }
         .status-box h2 {
             margin: 0 0 15px 0;
@@ -92,11 +97,11 @@
         </div>
         
         <div class="status-grid">
-            <div class="status-box">
+            <div class="status-box" id="temperature-box">
                 <h2>Nhiệt độ hiện tại</h2>
                 <div class="status-value" id="temperature">--°C</div>
             </div>
-            <div class="status-box">
+            <div class="status-box" id="fan-box">
                 <h2>Trạng thái quạt</h2>
                 <div class="status-value">
                     <span class="fan-icon" id="fan-icon">🔄</span>
@@ -104,14 +109,14 @@
                     <span class="relay-status relay-off" id="fan-indicator"></span>
                 </div>
             </div>
-            <div class="status-box">
+            <div class="status-box" id="heater1-box">
                 <h2>Trạng thái sưởi 1</h2>
                 <div class="status-value">
                     <span id="heater1-status">Tắt</span>
                     <span class="relay-status relay-off" id="heater1-indicator"></span>
                 </div>
             </div>
-            <div class="status-box">
+            <div class="status-box" id="heater2-box">
                 <h2>Trạng thái sưởi 2</h2>
                 <div class="status-value">
                     <span id="heater2-status">Tắt</span>
@@ -148,6 +153,13 @@
                 }
             }
         });
+
+        // Trạng thái hiện tại của các thiết bị
+        let deviceStates = {
+            fan: false,
+            heater1: false,
+            heater2: false
+        };
 
         // Hàm cập nhật trạng thái relay
         function updateRelayStatus(relayId, status) {
@@ -204,17 +216,24 @@
             temperatureChart.update();
         }
 
-        // Giả lập dữ liệu (thay thế bằng dữ liệu thực từ cảm biến)
-        setInterval(() => {
-            // Giả lập nhiệt độ ngẫu nhiên
-            const randomTemp = (20 + Math.random() * 10).toFixed(1);
-            updateTemperature(randomTemp);
-            
-            // Giả lập trạng thái relay
-            updateRelayStatus('heater1', Math.random() > 0.5);
-            updateRelayStatus('heater2', Math.random() > 0.5);
-            updateFanStatus(Math.random() > 0.5);
-        }, 2000);
+        // Thêm sự kiện click cho các ô trạng thái
+        document.getElementById('fan-box').addEventListener('click', () => {
+            deviceStates.fan = !deviceStates.fan;
+            updateFanStatus(deviceStates.fan);
+        });
+
+        document.getElementById('heater1-box').addEventListener('click', () => {
+            deviceStates.heater1 = !deviceStates.heater1;
+            updateRelayStatus('heater1', deviceStates.heater1);
+        });
+
+        document.getElementById('heater2-box').addEventListener('click', () => {
+            deviceStates.heater2 = !deviceStates.heater2;
+            updateRelayStatus('heater2', deviceStates.heater2);
+        });
+
+        // Khởi tạo giá trị nhiệt độ ban đầu
+        updateTemperature(25.0);
     </script>
 </body>
 </html>
