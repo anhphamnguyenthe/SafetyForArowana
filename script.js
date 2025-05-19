@@ -120,62 +120,75 @@ window.addEventListener('DOMContentLoaded', function() {
 
     // Nút MODE
     const modeBtn = document.getElementById('mode-toggle');
+    const switchBtn = document.getElementById('switch-toggle');
+    const fanBtn = document.getElementById('fan-toggle');
+    const resetBtn = document.getElementById('reset-btn');
+
+    function updateSwitchBtn() {
+        if (switchBtn) {
+            if (switchState === 'heater1') {
+                switchBtn.textContent = 'Sưởi 1';
+                switchBtn.style.background = '#ff9800';
+            } else {
+                switchBtn.textContent = 'Sưởi 2';
+                switchBtn.style.background = '#ff9800';
+            }
+        }
+    }
+
+    function updateFanBtn() {
+        if (fanBtn) {
+            fanBtn.textContent = fanState ? 'FAN: ON' : 'FAN: OFF';
+            fanBtn.style.background = fanState ? '#17a2b8' : '#28a745';
+        }
+    }
+
     if (modeBtn) {
         modeBtn.onclick = function() {
             if (mode === 'auto') {
                 mode = 'manual';
-                writeData('/mode', 'manual');
+                modeBtn.textContent = 'MANUAL';
+                modeBtn.style.background = '#ffc107';
             } else {
                 mode = 'auto';
-                writeData('/mode', 'auto');
+                modeBtn.textContent = 'AUTO';
+                modeBtn.style.background = '#007bff';
             }
-            updateUI();
         };
     }
 
-    // Nút SWITCH
-    const switchBtn = document.getElementById('switch-toggle');
     if (switchBtn) {
         switchBtn.onclick = function() {
             if (switchState === 'heater1') {
                 switchState = 'heater2';
-                writeData('/switchState', 'heater2');
             } else {
                 switchState = 'heater1';
-                writeData('/switchState', 'heater1');
             }
-            updateUI();
+            updateSwitchBtn();
         };
+        updateSwitchBtn();
     }
 
-    // Nút FAN
-    const fanBtn = document.getElementById('fan-toggle');
     if (fanBtn) {
         fanBtn.onclick = function() {
             fanState = !fanState;
-            writeData('/fan', fanState);
-            updateUI();
+            updateFanBtn();
         };
+        updateFanBtn();
     }
 
-    // Nút RESET
-    const resetBtn = document.getElementById('reset-btn');
     if (resetBtn) {
         resetBtn.onclick = function() {
             // Reset tất cả trạng thái về mặc định
             mode = 'auto';
             switchState = 'heater1';
             fanState = false;
-            
-            // Ghi dữ liệu reset lên Firebase
-            writeData('/', {
-                mode: 'auto',
-                switchState: 'heater1',
-                fan: false,
-                heater: false
-            });
-            
-            updateUI();
+            if (modeBtn) {
+                modeBtn.textContent = 'AUTO';
+                modeBtn.style.background = '#007bff';
+            }
+            updateSwitchBtn();
+            updateFanBtn();
             alert('Hệ thống đã được reset!');
         };
     }
