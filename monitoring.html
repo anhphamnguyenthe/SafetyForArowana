@@ -1,178 +1,173 @@
-<!-- monitoring.html -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trang chủ - Đồ án tốt nghiệp</title>
-    <link rel="stylesheet" href="style-monitoring.css">
+    <title>Hệ thống giám sát nhiệt độ</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .status-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .status-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .status-box h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .status-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+        }
+        .relay-status {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+        .relay-on {
+            background-color: #28a745;
+        }
+        .relay-off {
+            background-color: #dc3545;
+        }
+        .chart-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <div class="header-left">
-            <img src="logo.jpeg" alt="Logo trường" class="logo">
-        </div>
-        <nav class="header-right">
-            <a href="index.html" >Trang chủ</a>
-            <a href="about.html">Giới thiệu</a>
-            <a href="monitoring.html"class="active">Giám sát</a>
-            <a href="contact.html">Liên hệ</a>
-        </nav>
-    </header>
-
-    <section class="title-section">
-        <h1>DATABASE</h1>
-    </section>
-
-    <div id="time"> </div>
-    <div id="history" style="font-size: 1.2em; font-weight: bold; color: blue; margin-bottom: 10px;"> 
-        <a href="https://docs.google.com/spreadsheets/d/1ZhJKqYZQ7QSpXliChXZVFa8epDvSdsDV_BifjYk1TOA/edit?usp=sharing" target="_blank" style="text-decoration: underline; color: blue;">Lịch sử dữ liệu của cảm biến</a>
-    </div>
     <div class="container">
-        <!-- Slave 1 Container -->
-        <div class="slave-box" id="slave1-box">
-            <h3 style="color: red;">Trạm 1</h3>
-            <div class="sensor-grid">
-                <div class="sensor-info">
-                    <h2>Nhiệt Độ: <span id= "nhietdo">00</span> </h2>
-                    <img src="nhietdo1.png" alt="Cảm Biến Nhiệt Độ" class="sensor-image">
-                </div>
-
-                <div class="sensor-info">
-                    <h2>Độ Ẩm: <span id= "doam">00</span></h2>
-                    <img src="doam1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
-                </div>
-
-                <div class="sensor-info">
-                    <h2>CO: <span id= "gas">00</span></h2>
-                    <img src="5.png" alt="Cảm Biến Gas MQ2" class="sensor-image">
-                </div>
-
-                <div class="sensor-info">
-                    <h2>Tia UV: <span id= "uv">00</span></h2>
-                    <img src="8.png" alt="Cảm Biến UV" class="sensor-image">
+        <div class="header">
+            <h1>Hệ thống giám sát nhiệt độ</h1>
+        </div>
+        
+        <div class="status-container">
+            <div class="status-box">
+                <h2>Nhiệt độ hiện tại</h2>
+                <div class="status-value" id="temperature">--°C</div>
+            </div>
+            <div class="status-box">
+                <h2>Trạng thái sưởi 1</h2>
+                <div class="status-value">
+                    <span id="heater1-status">Tắt</span>
+                    <span class="relay-status relay-off" id="heater1-indicator"></span>
                 </div>
             </div>
-            <div class="charts-row">
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="temperatureChart"></canvas>
-                    
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="humidityChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="COChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="UVChart"></canvas>
-                    </div>
+            <div class="status-box">
+                <h2>Trạng thái sưởi 2</h2>
+                <div class="status-value">
+                    <span id="heater2-status">Tắt</span>
+                    <span class="relay-status relay-off" id="heater2-indicator"></span>
                 </div>
             </div>
         </div>
 
-        <!-- Slave 2 Container -->
-        <div class="slave-box" id="slave2-box">
-            <h3 style="color: rgb(219, 20, 20);">Trạm 2</h3>
-            <div class="toggle-container">
-                <button id="toggle-button" class="toggle-off">OFF</button>
-            </div>
-            <div class="sensor-grid">
-                <div class="sensor-info">
-                    <h2>Nhiệt Độ: <span id= "nhietdob">00</span> </h2>
-                    <img src="nhietdo1.png" alt="Cảm Biến Nhiệt Độ" class="sensor-image">
-                </div>
+        <div class="chart-container">
+            <canvas id="temperatureChart"></canvas>
+        </div>
+    </div>
 
-                <div class="sensor-info">
-                    <h2>Độ Ẩm: <span id= "doamb">00</span></h2>
-                    <img src="doam1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
-                </div>
+    <script>
+        // Khởi tạo biểu đồ nhiệt độ
+        const ctx = document.getElementById('temperatureChart').getContext('2d');
+        const temperatureChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Nhiệt độ (°C)',
+                    data: [],
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
 
-                <div class="sensor-info">
-                    <h2>Độ bụi: <span id= "dust">00</span></h2>
-                    <img src="6.png" alt="Cảm Biến Bụi" class="sensor-image">
-                </div>
-
-                <div class="sensor-info">
-                    <h2>Độ ồn: <span id= "sound">00</span></h2>
-                    <img src="7.png" alt="Cảm Biến Âm Thanh" class="sensor-image">
-                </div>
-            </div>
-            <div id="slave3-box">
-                <div class="slider-container" id="wind-box">
-                    <h2>Gió: <span id="wind">50</span></h2>
-                    <img src="10.png" alt="Cảm Biến Gió" class="sensor-image-1">
-                    <input type="range" min="0" max="18" value="50" class="slider" id="windSlider">
-                    <p>Giá trị gió: <span id="windValue">50</span></p>
-                </div>
+        // Hàm cập nhật trạng thái relay
+        function updateRelayStatus(relayId, status) {
+            const statusElement = document.getElementById(`${relayId}-status`);
+            const indicatorElement = document.getElementById(`${relayId}-indicator`);
             
-                <div class="slider-container" id="rain-box">
-                    <h2>Mưa: <span id="rain">00</span></h2>
-                    <img src="9.png" alt="Cảm Biến Mưa" class="sensor-image-1">
-                    <input type="range" min="0" max="100" value="50" class="slider" id="rainSlider">
-                    <p>Giá trị mưa: <span id="rainValue">50</span></p>
-                </div>
-           </div>
-           <div class="charts-row">
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="Temperature2Chart"></canvas>
-                    
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="Humidity2Chart"></canvas>
-                    
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="DustChart"></canvas>
-                    
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="SoundChart"></canvas>
-                    
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="WindChart"></canvas>
-                    
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <div class="chart-box">
-                        <canvas id="RainChart"></canvas>
-                    
-                    </div>
-                </div>
-            </div>
-        </div>
+            if (status) {
+                statusElement.textContent = 'Bật';
+                indicatorElement.classList.remove('relay-off');
+                indicatorElement.classList.add('relay-on');
+            } else {
+                statusElement.textContent = 'Tắt';
+                indicatorElement.classList.remove('relay-on');
+                indicatorElement.classList.add('relay-off');
+            }
+        }
 
-       
-        
-        
-        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
-        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
-        <!-- TODO: Add SDKs for Firebase products that you want to use
-        https://firebase.google.com/docs/web/setup#available-libraries -->
-        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <canvas id="dataChart" width="400" height="200"></canvas>
+        // Hàm cập nhật nhiệt độ
+        function updateTemperature(temp) {
+            document.getElementById('temperature').textContent = `${temp}°C`;
+            
+            // Cập nhật biểu đồ
+            const now = new Date();
+            const timeLabel = now.toLocaleTimeString();
+            
+            temperatureChart.data.labels.push(timeLabel);
+            temperatureChart.data.datasets[0].data.push(temp);
+            
+            // Giới hạn số điểm hiển thị trên biểu đồ
+            if (temperatureChart.data.labels.length > 20) {
+                temperatureChart.data.labels.shift();
+                temperatureChart.data.datasets[0].data.shift();
+            }
+            
+            temperatureChart.update();
+        }
 
-
-        
-        <script src="script.js"></script>
+        // Giả lập dữ liệu (thay thế bằng dữ liệu thực từ cảm biến)
+        setInterval(() => {
+            // Giả lập nhiệt độ ngẫu nhiên
+            const randomTemp = (20 + Math.random() * 10).toFixed(1);
+            updateTemperature(randomTemp);
+            
+            // Giả lập trạng thái relay
+            updateRelayStatus('heater1', Math.random() > 0.5);
+            updateRelayStatus('heater2', Math.random() > 0.5);
+        }, 2000);
+    </script>
 </body>
 </html>
