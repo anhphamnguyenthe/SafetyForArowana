@@ -1,311 +1,178 @@
+<!-- monitoring.html -->
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ thống giám sát nhiệt độ</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f6fa;
-            color: #2d3436;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f1f2f6;
-        }
-        .header h1 {
-            color: #2d3436;
-            font-size: 2.5em;
-            margin: 0;
-            padding: 10px 0;
-        }
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 30px;
-        }
-        .control-section {
-            background-color: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .status-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .status-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            height: 150px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .status-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .status-box h2 {
-            margin: 0 0 15px 0;
-            color: #2d3436;
-            font-size: 1.2em;
-        }
-        .status-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: #0984e3;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .relay-status {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            transition: background-color 0.3s ease;
-        }
-        .relay-on {
-            background-color: #00b894;
-            box-shadow: 0 0 10px rgba(0,184,148,0.5);
-        }
-        .relay-off {
-            background-color: #d63031;
-            box-shadow: 0 0 10px rgba(214,48,49,0.5);
-        }
-        .control-panel {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-top: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .mode-section {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #f1f2f6;
-        }
-        .mode-label {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #2d3436;
-            margin-bottom: 15px;
-        }
-        .mode-buttons {
-            display: flex;
-            gap: 15px;
-        }
-        .mode-button {
-            flex: 1;
-            padding: 12px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 600;
-        }
-        .mode-button.active {
-            background-color: #0984e3;
-            color: white;
-            box-shadow: 0 2px 4px rgba(9,132,227,0.3);
-        }
-        .mode-button:not(.active) {
-            background-color: #f1f2f6;
-            color: #2d3436;
-        }
-        .mode-button:hover:not(.active) {
-            background-color: #dfe6e9;
-        }
-        .switch-section {
-            text-align: center;
-        }
-        .switch-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .heater-label {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #2d3436;
-        }
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 70px;
-            height: 38px;
-        }
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #d63031;
-            transition: .4s;
-            border-radius: 38px;
-        }
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 30px;
-            width: 30px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        input:checked + .slider {
-            background-color: #00b894;
-        }
-        input:checked + .slider:before {
-            transform: translateX(32px);
-        }
-        .chart-section {
-            background-color: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .chart-title {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #2d3436;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .chart-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin-top: 30px;
-        }
-        .fan-icon {
-            font-size: 24px;
-            transition: transform 0.3s ease;
-        }
-        .fan-spinning {
-            animation: spin 2s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    <title>Trang chủ - Đồ án tốt nghiệp</title>
+    <link rel="stylesheet" href="style-monitoring.css">
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Hệ thống giám sát nhiệt độ</h1>
+    <header>
+        <div class="header-left">
+            <img src="logo.jpeg" alt="Logo trường" class="logo">
         </div>
-        
-        <div class="main-content">
-            <div class="control-section">
-                <div class="status-grid">
-                    <div class="status-box" id="temperature-box">
-                        <h2>Nhiệt độ hiện tại</h2>
-                        <div class="status-value" id="temperature">--°C</div>
-                    </div>
-                    <div class="status-box" id="fan-box">
-                        <h2>Trạng thái quạt</h2>
-                        <div class="status-value">
-                            <span class="fan-icon" id="fan-icon">🔄</span>
-                            <span id="fan-status">Tắt</span>
-                            <span class="relay-status relay-off" id="fan-indicator"></span>
-                        </div>
-                    </div>
-                    <div class="status-box" id="heater1-box">
-                        <h2>Trạng thái sưởi 1</h2>
-                        <div class="status-value">
-                            <span id="heater1-status">Tắt</span>
-                            <span class="relay-status relay-off" id="heater1-indicator"></span>
-                        </div>
-                    </div>
-                    <div class="status-box" id="heater2-box">
-                        <h2>Trạng thái sưởi 2</h2>
-                        <div class="status-value">
-                            <span id="heater2-status">Tắt</span>
-                            <span class="relay-status relay-off" id="heater2-indicator"></span>
-                        </div>
-                    </div>
-                </div>
+        <nav class="header-right">
+            <a href="index.html" >Trang chủ</a>
+            <a href="about.html">Giới thiệu</a>
+            <a href="monitoring.html"class="active">Giám sát</a>
+            <a href="contact.html">Liên hệ</a>
+        </nav>
+    </header>
 
-                <div class="control-panel">
-                    <div class="mode-section">
-                        <div class="mode-label">Chế độ hoạt động</div>
-                        <div class="mode-buttons">
-                            <button class="mode-button active" id="manual-mode">MANUAL</button>
-                            <button class="mode-button" id="auto-mode">AUTO</button>
-                        </div>
-                    </div>
-                    <div class="switch-section">
-                        <div class="mode-label">Chuyển đổi sưởi</div>
-                        <div class="switch-container">
-                            <span class="heater-label">Sưởi 1</span>
-                            <label class="switch">
-                                <input type="checkbox" id="heater-switch">
-                                <span class="slider"></span>
-                            </label>
-                            <span class="heater-label">Sưởi 2</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section class="title-section">
+        <h1>DATABASE</h1>
+    </section>
 
-            <div class="chart-section">
-                <div class="chart-title">Biểu đồ nhiệt độ theo thời gian thực</div>
-                <canvas id="temperatureChart"></canvas>
-
-                <div class="chart-grid">
-                    <div class="chart-container">
-                        <div class="chart-title">Thống kê nhiệt độ trong ngày</div>
-                        <canvas id="dailyChart"></canvas>
-                    </div>
-                    <div class="chart-container">
-                        <div class="chart-title">Thống kê nhiệt độ trong tuần</div>
-                        <canvas id="weeklyChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="time"> </div>
+    <div id="history" style="font-size: 1.2em; font-weight: bold; color: blue; margin-bottom: 10px;"> 
+        <a href="https://docs.google.com/spreadsheets/d/1ZhJKqYZQ7QSpXliChXZVFa8epDvSdsDV_BifjYk1TOA/edit?usp=sharing" target="_blank" style="text-decoration: underline; color: blue;">Lịch sử dữ liệu của cảm biến</a>
     </div>
+    <div class="container">
+        <!-- Slave 1 Container -->
+        <div class="slave-box" id="slave1-box">
+            <h3 style="color: red;">Trạm 1</h3>
+            <div class="sensor-grid">
+                <div class="sensor-info">
+                    <h2>Nhiệt Độ: <span id= "nhietdo">00</span> </h2>
+                    <img src="nhietdo1.png" alt="Cảm Biến Nhiệt Độ" class="sensor-image">
+                </div>
 
-    <script>
-        // ... Giữ nguyên code JavaScript ...
-    </script>
+                <div class="sensor-info">
+                    <h2>Độ Ẩm: <span id= "doam">00</span></h2>
+                    <img src="doam1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>CO: <span id= "gas">00</span></h2>
+                    <img src="5.png" alt="Cảm Biến Gas MQ2" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Tia UV: <span id= "uv">00</span></h2>
+                    <img src="8.png" alt="Cảm Biến UV" class="sensor-image">
+                </div>
+            </div>
+            <div class="charts-row">
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="temperatureChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="humidityChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="COChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="UVChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slave 2 Container -->
+        <div class="slave-box" id="slave2-box">
+            <h3 style="color: rgb(219, 20, 20);">Trạm 2</h3>
+            <div class="toggle-container">
+                <button id="toggle-button" class="toggle-off">OFF</button>
+            </div>
+            <div class="sensor-grid">
+                <div class="sensor-info">
+                    <h2>Nhiệt Độ: <span id= "nhietdob">00</span> </h2>
+                    <img src="nhietdo1.png" alt="Cảm Biến Nhiệt Độ" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ Ẩm: <span id= "doamb">00</span></h2>
+                    <img src="doam1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ bụi: <span id= "dust">00</span></h2>
+                    <img src="6.png" alt="Cảm Biến Bụi" class="sensor-image">
+                </div>
+
+                <div class="sensor-info">
+                    <h2>Độ ồn: <span id= "sound">00</span></h2>
+                    <img src="7.png" alt="Cảm Biến Âm Thanh" class="sensor-image">
+                </div>
+            </div>
+            <div id="slave3-box">
+                <div class="slider-container" id="wind-box">
+                    <h2>Gió: <span id="wind">50</span></h2>
+                    <img src="10.png" alt="Cảm Biến Gió" class="sensor-image-1">
+                    <input type="range" min="0" max="18" value="50" class="slider" id="windSlider">
+                    <p>Giá trị gió: <span id="windValue">50</span></p>
+                </div>
+            
+                <div class="slider-container" id="rain-box">
+                    <h2>Mưa: <span id="rain">00</span></h2>
+                    <img src="9.png" alt="Cảm Biến Mưa" class="sensor-image-1">
+                    <input type="range" min="0" max="100" value="50" class="slider" id="rainSlider">
+                    <p>Giá trị mưa: <span id="rainValue">50</span></p>
+                </div>
+           </div>
+           <div class="charts-row">
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="Temperature2Chart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="Humidity2Chart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="DustChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="SoundChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="WindChart"></canvas>
+                    
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-box">
+                        <canvas id="RainChart"></canvas>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+       
+        
+        
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
+        <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+        <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <canvas id="dataChart" width="400" height="200"></canvas>
+
+
+        
+        <script src="script.js"></script>
 </body>
 </html>
