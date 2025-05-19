@@ -9,6 +9,9 @@ let fanState = false;
 // Thêm biến mode toàn cục
 let mode = 'auto';
 
+// Trạng thái cho switch và fan
+let switchState = 'heater1'; // 'heater1' hoặc 'heater2'
+
 // Hàm xử lý đăng nhập
 function login(event) {
     event.preventDefault();
@@ -61,18 +64,64 @@ function toggleDevice(device) {
 
 // Nếu có nút mode-toggle trên trang, gán sự kiện chuyển đổi
 window.addEventListener('DOMContentLoaded', function() {
+    // Nút MODE
     const modeBtn = document.getElementById('mode-toggle');
     if (modeBtn) {
         modeBtn.onclick = function() {
             if (mode === 'auto') {
                 mode = 'manual';
                 modeBtn.textContent = 'MANUAL';
+                modeBtn.style.background = '#ffc107';
             } else {
                 mode = 'auto';
                 modeBtn.textContent = 'AUTO';
+                modeBtn.style.background = '#007bff';
             }
-            // Có thể thêm các hành động khác khi chuyển mode ở đây
-            // Ví dụ: cập nhật giao diện, gửi trạng thái lên server, ...
+        };
+    }
+
+    // Nút SWITCH
+    const switchBtn = document.getElementById('switch-toggle');
+    if (switchBtn) {
+        switchBtn.onclick = function() {
+            if (switchState === 'heater1') {
+                switchState = 'heater2';
+                switchBtn.textContent = 'Sưởi 2';
+            } else {
+                switchState = 'heater1';
+                switchBtn.textContent = 'Sưởi 1';
+            }
+        };
+    }
+
+    // Nút FAN
+    const fanBtn = document.getElementById('fan-toggle');
+    if (fanBtn) {
+        fanBtn.onclick = function() {
+            fanState = !fanState;
+            fanBtn.textContent = fanState ? 'FAN: ON' : 'FAN: OFF';
+            fanBtn.style.background = fanState ? '#17a2b8' : '#28a745';
+        };
+    }
+
+    // Nút RESET
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) {
+        resetBtn.onclick = function() {
+            // Reset tất cả trạng thái về mặc định
+            mode = 'auto';
+            switchState = 'heater1';
+            fanState = false;
+            if (modeBtn) {
+                modeBtn.textContent = 'AUTO';
+                modeBtn.style.background = '#007bff';
+            }
+            if (switchBtn) switchBtn.textContent = 'Sưởi 1';
+            if (fanBtn) {
+                fanBtn.textContent = 'FAN: OFF';
+                fanBtn.style.background = '#28a745';
+            }
+            alert('Hệ thống đã được reset!');
         };
     }
 });
