@@ -2,6 +2,15 @@
 const DEFAULT_USERNAME = "admin";
 const DEFAULT_PASSWORD = "admin123";
 
+// Firebase configuration
+const firebaseConfig = {
+    databaseURL: "https://data-ds18b20-e8360-default-rtdb.firebaseio.com/"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
 // Trạng thái của các thiết bị
 let heaterState = false;
 let fanState = false;
@@ -41,15 +50,57 @@ function resetSystem() {
     alert('Hệ thống đã được reset!');
 }
 
-// Hàm bật/tắt heater
+// Hàm đọc dữ liệu từ Firebase
+function readData() {
+    database.ref('/').on('value', (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+            // Cập nhật trạng thái từ dữ liệu Firebase
+            if (data.heater !== undefined) heaterState = data.heater;
+            if (data.fan !== undefined) fanState = data.fan;
+            if (data.mode !== undefined) mode = data.mode;
+            if (data.switchState !== undefined) switchState = data.switchState;
+            
+            // Cập nhật UI
+            updateUI();
+        }
+    });
+}
+
+// Hàm ghi dữ liệu lên Firebase
+function writeData(path, value) {
+    database.ref(path).set(value);
+}
+
+// Hàm cập nhật UI dựa trên trạng thái
+function updateUI() {
+    const modeBtn = document.getElementById('mode-toggle');
+    const switchBtn = document.getElementById('switch-toggle');
+    const fanBtn = document.getElementById('fan-toggle');
+
+    if (modeBtn) {
+        modeBtn.textContent = mode.toUpperCase();
+        modeBtn.style.background = mode === 'auto' ? '#007bff' : '#ffc107';
+    }
+    if (switchBtn) {
+        switchBtn.textContent = switchState === 'heater1' ? 'Sưởi 1' : 'Sưởi 2';
+    }
+    if (fanBtn) {
+        fanBtn.textContent = fanState ? 'FAN: ON' : 'FAN: OFF';
+        fanBtn.style.background = fanState ? '#17a2b8' : '#28a745';
+    }
+}
+
+// Cập nhật các hàm hiện có để ghi dữ liệu lên Firebase
 function toggleHeater() {
     heaterState = !heaterState;
+    writeData('/heater', heaterState);
     alert('Heater đã ' + (heaterState ? 'bật' : 'tắt'));
 }
 
-// Hàm bật/tắt fan
 function toggleFan() {
     fanState = !fanState;
+    writeData('/fan', fanState);
     alert('Fan đã ' + (fanState ? 'bật' : 'tắt'));
 }
 
@@ -62,21 +113,23 @@ function toggleDevice(device) {
     }
 }
 
-// Nếu có nút mode-toggle trên trang, gán sự kiện chuyển đổi
+// Cập nhật event listener
 window.addEventListener('DOMContentLoaded', function() {
+    // Đọc dữ liệu từ Firebase khi trang được tải
+    readData();
+
     // Nút MODE
     const modeBtn = document.getElementById('mode-toggle');
     if (modeBtn) {
         modeBtn.onclick = function() {
             if (mode === 'auto') {
                 mode = 'manual';
-                modeBtn.textContent = 'MANUAL';
-                modeBtn.style.background = '#ffc107';
+                writeData('/mode', 'manual');
             } else {
                 mode = 'auto';
-                modeBtn.textContent = 'AUTO';
-                modeBtn.style.background = '#007bff';
+                writeData('/mode', 'auto');
             }
+            updateUI();
         };
     }
 
@@ -86,11 +139,12 @@ window.addEventListener('DOMContentLoaded', function() {
         switchBtn.onclick = function() {
             if (switchState === 'heater1') {
                 switchState = 'heater2';
-                switchBtn.textContent = 'Sưởi 2';
+                writeData('/switchState', 'heater2');
             } else {
                 switchState = 'heater1';
-                switchBtn.textContent = 'Sưởi 1';
+                writeData('/switchState', 'heater1');
             }
+            updateUI();
         };
     }
 
@@ -99,8 +153,8 @@ window.addEventListener('DOMContentLoaded', function() {
     if (fanBtn) {
         fanBtn.onclick = function() {
             fanState = !fanState;
-            fanBtn.textContent = fanState ? 'FAN: ON' : 'FAN: OFF';
-            fanBtn.style.background = fanState ? '#17a2b8' : '#28a745';
+            writeData('/fan', fanState);
+            updateUI();
         };
     }
 
@@ -112,15 +166,16 @@ window.addEventListener('DOMContentLoaded', function() {
             mode = 'auto';
             switchState = 'heater1';
             fanState = false;
-            if (modeBtn) {
-                modeBtn.textContent = 'AUTO';
-                modeBtn.style.background = '#007bff';
-            }
-            if (switchBtn) switchBtn.textContent = 'Sưởi 1';
-            if (fanBtn) {
-                fanBtn.textContent = 'FAN: OFF';
-                fanBtn.style.background = '#28a745';
-            }
+            
+            // Ghi dữ liệu reset lên Firebase
+            writeData('/', {
+                mode: 'auto',
+                switchState: 'heater1',
+                fan: false,
+                heater: false
+            });
+            
+            updateUI();
             alert('Hệ thống đã được reset!');
         };
     }
