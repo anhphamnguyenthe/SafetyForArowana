@@ -61,8 +61,7 @@
 
             <div class="mode-section" style="text-align:center; margin: 30px 0;">
                 <span class="mode-label" style="font-size:1.2em; font-weight:bold; color:#333; margin-right: 20px;">MODE:</span>
-                <button id="manual-mode" class="mode-button active" style="padding:10px 30px; font-size:16px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; background:#007bff; color:white; margin-right:10px;">MANUAL</button>
-                <button id="auto-mode" class="mode-button" style="padding:10px 30px; font-size:16px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; background:#e9ecef; color:#333;">AUTO</button>
+                <button id="mode-toggle" class="mode-button" style="padding:10px 40px; font-size:16px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; background:#007bff; color:white;">AUTO</button>
             </div>
         </div>
     </div>
@@ -76,27 +75,16 @@
     <script src="script.js"></script>
 
     <script>
-        let mode = 'manual';
-        const manualBtn = document.getElementById('manual-mode');
-        const autoBtn = document.getElementById('auto-mode');
-
-        manualBtn.onclick = function() {
-            mode = 'manual';
-            manualBtn.classList.add('active');
-            manualBtn.style.background = '#007bff';
-            manualBtn.style.color = 'white';
-            autoBtn.classList.remove('active');
-            autoBtn.style.background = '#e9ecef';
-            autoBtn.style.color = '#333';
-        };
-        autoBtn.onclick = function() {
-            mode = 'auto';
-            autoBtn.classList.add('active');
-            autoBtn.style.background = '#007bff';
-            autoBtn.style.color = 'white';
-            manualBtn.classList.remove('active');
-            manualBtn.style.background = '#e9ecef';
-            manualBtn.style.color = '#333';
+        let mode = 'auto';
+        const modeBtn = document.getElementById('mode-toggle');
+        modeBtn.onclick = function() {
+            if (mode === 'auto') {
+                mode = 'manual';
+                modeBtn.textContent = 'MANUAL';
+            } else {
+                mode = 'auto';
+                modeBtn.textContent = 'AUTO';
+            }
         };
     </script>
 </body>
