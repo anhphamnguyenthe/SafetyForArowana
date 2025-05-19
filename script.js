@@ -87,7 +87,8 @@ function updateUI() {
     }
     if (fanBtn) {
         fanBtn.textContent = fanState ? 'FAN: ON' : 'FAN: OFF';
-        fanBtn.style.background = fanState ? '#17a2b8' : '#28a745';
+        fanBtn.style.background = fanState ? '#28a745' : '#dc3545';
+        fanBtn.style.color = '#fff';
     }
 }
 
@@ -139,7 +140,8 @@ window.addEventListener('DOMContentLoaded', function() {
     function updateFanBtn() {
         if (fanBtn) {
             fanBtn.textContent = fanState ? 'FAN: ON' : 'FAN: OFF';
-            fanBtn.style.background = fanState ? '#17a2b8' : '#28a745';
+            fanBtn.style.background = fanState ? '#28a745' : '#dc3545';
+            fanBtn.style.color = '#fff';
         }
     }
 
