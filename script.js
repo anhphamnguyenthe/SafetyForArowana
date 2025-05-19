@@ -1,6 +1,6 @@
 // Thông tin đăng nhập mặc định
 const DEFAULT_USERNAME = "admin";
-const DEFAULT_PASSWORD = "admin123";
+const DEFAULT_PASSWORD = "123456";
 
 // Firebase configuration
 const firebaseConfig = {
