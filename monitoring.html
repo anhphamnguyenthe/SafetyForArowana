@@ -25,14 +25,18 @@
     </section>
 
     <div id="time"></div>
+
     <div id="history" style="font-size: 1.2em; font-weight: bold; color: blue; margin-bottom: 10px;"> 
-        <a href="https://docs.google.com/spreadsheets/d/1ZhJKqYZQ7QSpXliChXZVFa8epDvSdsDV_BifjYk1TOA/edit?usp=sharing" target="_blank" style="text-decoration: underline; color: blue;">Lịch sử dữ liệu nhiệt độ</a>
+        <a href="https://docs.google.com/spreadsheets/d/1ZhJKqYZQ7QSpXliChXZVFa8epDvSdsDV_BifjYk1TOA/edit?usp=sharing" target="_blank" style="text-decoration: underline; color: blue;">
+            Lịch sử dữ liệu nhiệt độ
+        </a>
     </div>
 
     <div class="container">
         <!-- Slave 1 Container -->
         <div class="slave-box" id="slave1-box">
             <h3 style="color: red;">Trạng thái hệ thống</h3>
+
             <div class="sensor-grid">
                 <div class="sensor-info">
                     <h2>Nhiệt Độ: <span id="nhietdo">00</span></h2>
@@ -41,17 +45,17 @@
 
                 <div class="sensor-info">
                     <h2>Sưởi 1: <span id="doam">00</span></h2>
-                    <img src="suoi1.png" alt="Cảm Biến Độ Ẩm" class="sensor-image">
+                    <img src="suoi1.png" alt="Sưởi 1" class="sensor-image">
                 </div>
 
                 <div class="sensor-info">
                     <h2>Sưởi 2: <span id="gas">00</span></h2>
-                    <img src="suoi1.png" alt="Cảm Biến Gas MQ2" class="sensor-image">
+                    <img src="suoi1.png" alt="Sưởi 2" class="sensor-image">
                 </div>
 
                 <div class="sensor-info">
                     <h2>Quạt: <span id="uv">00</span></h2>
-                    <img src="fan.png" alt="" class="sensor-image">
+                    <img src="fan.png" alt="Quạt" class="sensor-image">
                 </div>
             </div>
 
@@ -80,12 +84,13 @@
         </div>
     </div>
 
+    <!-- Firebase & Chart.js -->
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-database.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.3.1/firebase-analytics.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <canvas id="dataChart" width="400" height="200"></canvas>
 
+    <!-- JS xử lý logic -->
     <script src="script.js"></script>
 </body>
 </html>
