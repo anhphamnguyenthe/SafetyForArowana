@@ -6,31 +6,160 @@
     <title>Hệ thống giám sát nhiệt độ</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        /* ... Giữ nguyên các style cũ ... */
-        .control-panel {
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f6fa;
+            color: #2d3436;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f2f6;
+        }
+        .header h1 {
+            color: #2d3436;
+            font-size: 2.5em;
+            margin: 0;
+            padding: 10px 0;
+        }
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+        }
+        .control-section {
+            background-color: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .status-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 20px;
-            margin: 30px 0;
+            margin-bottom: 30px;
         }
-        .control-box {
-            background-color: #f8f9fa;
+        .status-box {
+            background-color: white;
             padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .status-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .status-box h2 {
+            margin: 0 0 15px 0;
+            color: #2d3436;
+            font-size: 1.2em;
+        }
+        .status-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #0984e3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .relay-status {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+        }
+        .relay-on {
+            background-color: #00b894;
+            box-shadow: 0 0 10px rgba(0,184,148,0.5);
+        }
+        .relay-off {
+            background-color: #d63031;
+            box-shadow: 0 0 10px rgba(214,48,49,0.5);
+        }
+        .control-panel {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .mode-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #f1f2f6;
+        }
+        .mode-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #2d3436;
+            margin-bottom: 15px;
+        }
+        .mode-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        .mode-button {
+            flex: 1;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
             border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+        .mode-button.active {
+            background-color: #0984e3;
+            color: white;
+            box-shadow: 0 2px 4px rgba(9,132,227,0.3);
+        }
+        .mode-button:not(.active) {
+            background-color: #f1f2f6;
+            color: #2d3436;
+        }
+        .mode-button:hover:not(.active) {
+            background-color: #dfe6e9;
+        }
+        .switch-section {
             text-align: center;
         }
         .switch-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .heater-label {
+            font-size: 1.1em;
+            font-weight: 600;
+            color: #2d3436;
         }
         .switch {
             position: relative;
             display: inline-block;
-            width: 60px;
-            height: 34px;
+            width: 70px;
+            height: 38px;
         }
         .switch input {
             opacity: 0;
@@ -44,54 +173,57 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: #ccc;
+            background-color: #d63031;
             transition: .4s;
-            border-radius: 34px;
+            border-radius: 38px;
         }
         .slider:before {
             position: absolute;
             content: "";
-            height: 26px;
-            width: 26px;
+            height: 30px;
+            width: 30px;
             left: 4px;
             bottom: 4px;
             background-color: white;
             transition: .4s;
             border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         input:checked + .slider {
-            background-color: #2196F3;
+            background-color: #00b894;
         }
         input:checked + .slider:before {
-            transform: translateX(26px);
+            transform: translateX(32px);
         }
-        .mode-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin: 5px;
+        .chart-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
-        .mode-button.active {
-            background-color: #2196F3;
-            color: white;
-        }
-        .mode-button:not(.active) {
-            background-color: #e9ecef;
-            color: #333;
-        }
-        .heater-label {
-            font-size: 18px;
+        .chart-title {
+            font-size: 1.2em;
             font-weight: bold;
-            color: #333;
+            color: #2d3436;
+            margin-bottom: 20px;
+            text-align: center;
         }
-        .mode-label {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
+        .chart-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .fan-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+        .fan-spinning {
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -101,171 +233,79 @@
             <h1>Hệ thống giám sát nhiệt độ</h1>
         </div>
         
-        <div class="status-grid">
-            <div class="status-box" id="temperature-box">
-                <h2>Nhiệt độ hiện tại</h2>
-                <div class="status-value" id="temperature">--°C</div>
-            </div>
-            <div class="status-box" id="fan-box">
-                <h2>Trạng thái quạt</h2>
-                <div class="status-value">
-                    <span class="fan-icon" id="fan-icon">🔄</span>
-                    <span id="fan-status">Tắt</span>
-                    <span class="relay-status relay-off" id="fan-indicator"></span>
+        <div class="main-content">
+            <div class="control-section">
+                <div class="status-grid">
+                    <div class="status-box" id="temperature-box">
+                        <h2>Nhiệt độ hiện tại</h2>
+                        <div class="status-value" id="temperature">--°C</div>
+                    </div>
+                    <div class="status-box" id="fan-box">
+                        <h2>Trạng thái quạt</h2>
+                        <div class="status-value">
+                            <span class="fan-icon" id="fan-icon">🔄</span>
+                            <span id="fan-status">Tắt</span>
+                            <span class="relay-status relay-off" id="fan-indicator"></span>
+                        </div>
+                    </div>
+                    <div class="status-box" id="heater1-box">
+                        <h2>Trạng thái sưởi 1</h2>
+                        <div class="status-value">
+                            <span id="heater1-status">Tắt</span>
+                            <span class="relay-status relay-off" id="heater1-indicator"></span>
+                        </div>
+                    </div>
+                    <div class="status-box" id="heater2-box">
+                        <h2>Trạng thái sưởi 2</h2>
+                        <div class="status-value">
+                            <span id="heater2-status">Tắt</span>
+                            <span class="relay-status relay-off" id="heater2-indicator"></span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="status-box" id="heater1-box">
-                <h2>Trạng thái sưởi 1</h2>
-                <div class="status-value">
-                    <span id="heater1-status">Tắt</span>
-                    <span class="relay-status relay-off" id="heater1-indicator"></span>
-                </div>
-            </div>
-            <div class="status-box" id="heater2-box">
-                <h2>Trạng thái sưởi 2</h2>
-                <div class="status-value">
-                    <span id="heater2-status">Tắt</span>
-                    <span class="relay-status relay-off" id="heater2-indicator"></span>
-                </div>
-            </div>
-        </div>
 
-        <div class="control-panel">
-            <div class="control-box">
-                <div class="mode-label">Chế độ hoạt động</div>
-                <button class="mode-button active" id="manual-mode">MANUAL</button>
-                <button class="mode-button" id="auto-mode">AUTO</button>
-            </div>
-            <div class="control-box">
-                <div class="mode-label">Chuyển đổi sưởi</div>
-                <div class="switch-container">
-                    <span class="heater-label">Sưởi 1</span>
-                    <label class="switch">
-                        <input type="checkbox" id="heater-switch">
-                        <span class="slider"></span>
-                    </label>
-                    <span class="heater-label">Sưởi 2</span>
+                <div class="control-panel">
+                    <div class="mode-section">
+                        <div class="mode-label">Chế độ hoạt động</div>
+                        <div class="mode-buttons">
+                            <button class="mode-button active" id="manual-mode">MANUAL</button>
+                            <button class="mode-button" id="auto-mode">AUTO</button>
+                        </div>
+                    </div>
+                    <div class="switch-section">
+                        <div class="mode-label">Chuyển đổi sưởi</div>
+                        <div class="switch-container">
+                            <span class="heater-label">Sưởi 1</span>
+                            <label class="switch">
+                                <input type="checkbox" id="heater-switch">
+                                <span class="slider"></span>
+                            </label>
+                            <span class="heater-label">Sưởi 2</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="chart-container">
-            <div class="chart-title">Biểu đồ nhiệt độ theo thời gian thực</div>
-            <canvas id="temperatureChart"></canvas>
-        </div>
+            <div class="chart-section">
+                <div class="chart-title">Biểu đồ nhiệt độ theo thời gian thực</div>
+                <canvas id="temperatureChart"></canvas>
 
-        <div class="chart-grid">
-            <div class="chart-container">
-                <div class="chart-title">Thống kê nhiệt độ trong ngày</div>
-                <canvas id="dailyChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Thống kê nhiệt độ trong tuần</div>
-                <canvas id="weeklyChart"></canvas>
+                <div class="chart-grid">
+                    <div class="chart-container">
+                        <div class="chart-title">Thống kê nhiệt độ trong ngày</div>
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div class="chart-title">Thống kê nhiệt độ trong tuần</div>
+                        <canvas id="weeklyChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ... Giữ nguyên code biểu đồ ...
-
-        // Trạng thái hiện tại của các thiết bị
-        let deviceStates = {
-            fan: false,
-            heater1: false,
-            heater2: false,
-            mode: 'manual' // 'manual' hoặc 'auto'
-        };
-
-        // Hàm cập nhật trạng thái relay
-        function updateRelayStatus(relayId, status) {
-            const statusElement = document.getElementById(`${relayId}-status`);
-            const indicatorElement = document.getElementById(`${relayId}-indicator`);
-            
-            if (status) {
-                statusElement.textContent = 'Bật';
-                indicatorElement.classList.remove('relay-off');
-                indicatorElement.classList.add('relay-on');
-            } else {
-                statusElement.textContent = 'Tắt';
-                indicatorElement.classList.remove('relay-on');
-                indicatorElement.classList.add('relay-off');
-            }
-        }
-
-        // Hàm cập nhật trạng thái quạt
-        function updateFanStatus(status) {
-            const statusElement = document.getElementById('fan-status');
-            const indicatorElement = document.getElementById('fan-indicator');
-            const fanIcon = document.getElementById('fan-icon');
-            
-            if (status) {
-                statusElement.textContent = 'Bật';
-                indicatorElement.classList.remove('relay-off');
-                indicatorElement.classList.add('relay-on');
-                fanIcon.classList.add('fan-spinning');
-            } else {
-                statusElement.textContent = 'Tắt';
-                indicatorElement.classList.remove('relay-on');
-                indicatorElement.classList.add('relay-off');
-                fanIcon.classList.remove('fan-spinning');
-            }
-        }
-
-        // Hàm cập nhật chế độ hoạt động
-        function updateMode(mode) {
-            deviceStates.mode = mode;
-            const manualButton = document.getElementById('manual-mode');
-            const autoButton = document.getElementById('auto-mode');
-            
-            if (mode === 'manual') {
-                manualButton.classList.add('active');
-                autoButton.classList.remove('active');
-            } else {
-                manualButton.classList.remove('active');
-                autoButton.classList.add('active');
-            }
-        }
-
-        // Hàm cập nhật trạng thái sưởi dựa trên switch
-        function updateHeaterSwitch(isHeater2) {
-            if (isHeater2) {
-                deviceStates.heater1 = false;
-                deviceStates.heater2 = true;
-                updateRelayStatus('heater1', false);
-                updateRelayStatus('heater2', true);
-            } else {
-                deviceStates.heater1 = true;
-                deviceStates.heater2 = false;
-                updateRelayStatus('heater1', true);
-                updateRelayStatus('heater2', false);
-            }
-        }
-
-        // Thêm sự kiện cho nút chế độ
-        document.getElementById('manual-mode').addEventListener('click', () => {
-            updateMode('manual');
-        });
-
-        document.getElementById('auto-mode').addEventListener('click', () => {
-            updateMode('auto');
-        });
-
-        // Thêm sự kiện cho switch sưởi
-        document.getElementById('heater-switch').addEventListener('change', (e) => {
-            updateHeaterSwitch(e.target.checked);
-        });
-
-        // Thêm sự kiện click cho quạt
-        document.getElementById('fan-box').addEventListener('click', () => {
-            if (deviceStates.mode === 'manual') {
-                deviceStates.fan = !deviceStates.fan;
-                updateFanStatus(deviceStates.fan);
-            }
-        });
-
-        // Khởi tạo giá trị nhiệt độ ban đầu
-        updateTemperature(25.0);
+        // ... Giữ nguyên code JavaScript ...
     </script>
 </body>
 </html>
