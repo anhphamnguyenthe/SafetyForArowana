@@ -243,37 +243,7 @@ header {
         font-size: 20px;
     }
 }
-.charts-row {
-    display: flex;
-    justify-content: space-between; /* Đảm bảo căn đều hai bên và giữa */
-    align-items: flex-start;
-    flex-wrap: wrap; /* Cho phép xuống hàng khi không đủ không gian */
-    gap: 20px; /* Khoảng cách giữa các biểu đồ */
-    margin: 20px 0;
-}
 
-.chart-container {
-    flex: 1 1 calc(50% - 20px); /* Đảm bảo mỗi biểu đồ chiếm tối đa 50% chiều rộng */
-    max-width: calc(50% - 20px); /* Giới hạn kích thước từng biểu đồ, trừ khoảng cách giữa các biểu đồ */
-    margin: 10px 0; /* Khoảng cách trên và dưới */
-    text-align: center;
-    overflow: hidden; /* Đảm bảo không vượt quá khung */
-}
 
-.chart-box {
-    border: 2px solid #007bff; /* Viền xanh dương */
-    background-color: #ffffff; /* Nền trắng */
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
-}
-
-canvas {
-    display: block;
-    margin: 0 auto;
-    width: 100%; /* Đảm bảo biểu đồ luôn vừa với khung */
-    max-width: 100%; /* Đảm bảo không vượt quá chiều rộng của khung */
-    height: auto;
-}
 
 
