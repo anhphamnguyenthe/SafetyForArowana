@@ -26,7 +26,7 @@
         }
         .status-container {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -64,6 +64,33 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
         }
+        .device-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .device-box {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .device-box h2 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .fan-icon {
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .fan-spinning {
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -78,13 +105,24 @@
                 <div class="status-value" id="temperature">--°C</div>
             </div>
             <div class="status-box">
+                <h2>Trạng thái quạt</h2>
+                <div class="status-value">
+                    <span class="fan-icon" id="fan-icon">🔄</span>
+                    <span id="fan-status">Tắt</span>
+                    <span class="relay-status relay-off" id="fan-indicator"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="device-grid">
+            <div class="device-box">
                 <h2>Trạng thái sưởi 1</h2>
                 <div class="status-value">
                     <span id="heater1-status">Tắt</span>
                     <span class="relay-status relay-off" id="heater1-indicator"></span>
                 </div>
             </div>
-            <div class="status-box">
+            <div class="device-box">
                 <h2>Trạng thái sưởi 2</h2>
                 <div class="status-value">
                     <span id="heater2-status">Tắt</span>
@@ -138,6 +176,25 @@
             }
         }
 
+        // Hàm cập nhật trạng thái quạt
+        function updateFanStatus(status) {
+            const statusElement = document.getElementById('fan-status');
+            const indicatorElement = document.getElementById('fan-indicator');
+            const fanIcon = document.getElementById('fan-icon');
+            
+            if (status) {
+                statusElement.textContent = 'Bật';
+                indicatorElement.classList.remove('relay-off');
+                indicatorElement.classList.add('relay-on');
+                fanIcon.classList.add('fan-spinning');
+            } else {
+                statusElement.textContent = 'Tắt';
+                indicatorElement.classList.remove('relay-on');
+                indicatorElement.classList.add('relay-off');
+                fanIcon.classList.remove('fan-spinning');
+            }
+        }
+
         // Hàm cập nhật nhiệt độ
         function updateTemperature(temp) {
             document.getElementById('temperature').textContent = `${temp}°C`;
@@ -167,6 +224,7 @@
             // Giả lập trạng thái relay
             updateRelayStatus('heater1', Math.random() > 0.5);
             updateRelayStatus('heater2', Math.random() > 0.5);
+            updateFanStatus(Math.random() > 0.5);
         }, 2000);
     </script>
 </body>
