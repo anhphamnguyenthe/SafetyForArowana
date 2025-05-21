@@ -115,7 +115,7 @@ header {
 }
 
 .content {
-    margin: 30px auto;
+    margin: 0 auto 30px auto;
     padding: 20px;
     display: inline-block;
     max-width: 600px;
@@ -131,5 +131,30 @@ header {
     }
     .title-section h1 {
         font-size: 2em;
+    }
+}
+
+.fish-title-flex {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+}
+
+.fish {
+    width: 220px; /* Điều chỉnh kích thước cá theo ý bạn */
+    height: auto;
+}
+
+.title-center {
+    text-align: center;
+}
+
+@media (max-width: 900px) {
+    .fish {
+        width: 100px;
+    }
+    .fish-title-flex {
+        gap: 10px;
     }
 }
